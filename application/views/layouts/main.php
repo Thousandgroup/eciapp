@@ -11,7 +11,7 @@
     <?php $this->load->view('partials/styles'); ?>
 </head>
 
-<body class="hold-transition layout-fixed accent-orange">
+<body class="hold-transition layout-fixed accent-primary">
     <!-- Site wrapper -->
     <div class="wrapper">
         <!-- Navbar -->
@@ -21,7 +21,16 @@
         <!-- Main Sidebar Container -->
         <?php $this->load->view('components/sidebar'); ?>
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="position: relative;">
+
+            <!-- Overlay Loading -->
+            <div id="content-loading-overlay">
+                <div class="text-center d-flex align-items-center flex-column">
+                    <div class="loader-spinner"></div>
+                    <div id="content-loading-text" class="loading-text mt-2">Loading ...</div>
+                </div>
+            </div>
+
             <!-- Content Header (Page header) -->
             <?php $this->load->view('components/header'); ?>
             <!-- Main content -->
@@ -37,7 +46,7 @@
         <!-- /.content-wrapper -->
 
         <?php $this->load->view('components/footer'); ?>
-    
+
     </div>
     <!-- ./wrapper -->
 

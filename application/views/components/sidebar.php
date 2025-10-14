@@ -1,7 +1,7 @@
-<aside class="main-sidebar sidebar-light-orange elevation-4">
+<aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= base_url() ?>assets/index3.html" class="brand-link bg-light d-flex justify-content-center">
-        <img src="<?= base_url() ?>assets/logo/logo.png" alt="Logo Inventory" style="width: 130px; padding:3px">
+        <img src="<?= base_url() ?>assets/img/logo/ecilogo.png" alt="Logo Inventory" style="width: 130px; padding:3px">
     </a>
 
     <!-- Sidebar -->
@@ -26,7 +26,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="../widgets.html" class="nav-link active">
+                    <a href="<?=site_url('Dashboard')?>" class="nav-link active">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -51,10 +51,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../widgets.html" class="nav-link">
+                    <a href="../widgets.html" class="nav-link" title="Department Management">
                         <i class="nav-icon fas fa-building"></i>
-                        <p>
-                            Department Management
+                        <p class="text-truncate" style="max-width: 170px;">
+                            Dept. Management
                         </p>
                     </a>
                 </li>

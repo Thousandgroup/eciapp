@@ -4,3 +4,5 @@
 <script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
+<!-- spesifik page -->
+<script src="<?= base_url() ?>assets/js/loader-content.js"></script>
