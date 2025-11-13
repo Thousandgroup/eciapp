@@ -8,13 +8,14 @@
 
 	<link rel="icon" type="image/x-icon" href="<?= base_url('assets/'); ?>img/icon/ecilogo.ico">
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
     <?php $this->load->view('partials/styles'); ?>
 </head>
 
 <body class="hold-transition layout-fixed accent-primary">
     <!-- Site wrapper -->
     <div class="wrapper">
+        <?php $this->load->view('components/alert'); ?>
         <!-- Navbar -->
         <?php $this->load->view('components/navbar'); ?>
         <!-- /.navbar -->

@@ -5,4 +5,5 @@
 <!-- AdminLTE App -->
 <script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 <!-- spesifik page -->
+<!-- <script src="<?= base_url() ?>assets/js/custome-toast.js"></script> -->
 <script src="<?= base_url() ?>assets/js/loader-content.js"></script>

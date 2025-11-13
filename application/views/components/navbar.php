@@ -10,6 +10,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $this->session->userdata('name') ? $this->session->userdata('name') : 'Guest'; ?></span>
                 <i class="far fa-user"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -21,6 +22,10 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
                     <i class="fas fa-cog mr-2"></i> Change Password
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="<?=site_url('logout'); ?>" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
                 <div class="dropdown-divider"></div>
             </div>

@@ -10,13 +10,15 @@
 	<link rel="icon" type="image/x-icon" href="<?= base_url('assets/'); ?>img/icon/ecilogo.ico">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/fontawesome-free/css/all.min.css">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/dist/css/adminlte.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/toastr/toastr.min.css">
     <!-- spesific page -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/login.css">
 
@@ -32,6 +34,7 @@
 </head>
 
 <body class="hold-transition login-page">
+    <?php $this->load->view('components/alert'); ?>
     <div class="login-box">
         <div class="login-logo">
             <!-- <img src="<?= base_url() ?>assets/img/logo/ecilogo.png" alt="eci-logo" style="width:70px;"> -->
@@ -41,7 +44,7 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="<?= base_url() ?>assets/index3.html" method="post">
+                <?= form_open('login/process'); ?>
                     <div class="input-group mb-3">
                         <input type="text" name="employee_id" id="employee_id" class="form-control" placeholder="Enter Employee ID">
                         <div class="input-group-append">
@@ -70,7 +73,7 @@
                         </div>
                         <!-- /.col -->
                     </div>
-                </form>
+                <?= form_close(); ?>
 
                 <!-- /.social-auth-links -->
 
@@ -89,8 +92,11 @@
     <script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="<?= base_url() ?>assets/dist/js/adminlte.min.js?v=3.2.0"></script>
+    <!-- Toastr -->
+    <script src="<?= base_url() ?>assets/plugins/toastr/toastr.min.js"></script>
     <!-- spesific page -->
     <script src="<?= base_url() ?>assets/js/login.js"></script>
+    <script src="<?= base_url() ?>assets/js/custome-toast.js"></script>
 </body>
 
 
