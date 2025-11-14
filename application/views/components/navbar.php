@@ -9,9 +9,9 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $this->session->userdata('name') ? $this->session->userdata('name') : 'Guest'; ?></span>
-                <i class="far fa-user"></i>
+            <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#">
+                <i class="fas fa-user"></i>
+                <span class="ml-2 d-none d-lg-inline text-gray-600 text-sm"><?= $this->session->userdata('name') ? $this->session->userdata('name') : 'Guest'; ?></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span class="dropdown-item dropdown-header">Setting Account</span>

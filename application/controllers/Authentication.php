@@ -108,6 +108,8 @@ class Authentication extends CI_Controller {
                 'role_id' => $user['role_id'],
                 'logged_in' => TRUE
             ]);
+            $this->session->set_userdata('test', 'abc');
+
 
             log_message('info', 'User ' . $user['nik'] . ' logged in from ' . $ip);
 
@@ -220,6 +222,178 @@ class Authentication extends CI_Controller {
         }
     }
 
+/**
+ * Displays the forgot password page
+ * 
+ * This function loads the forgot password view, which contains a form to
+ * enter an employee ID and request a password reset link.
+ * 
+ * @return void
+ */
+    public function forgot_password()
+    {
+        $this->load->view('layouts/forgot_password');
+    }
+
+    public function send_reset_link()
+    {
+        $employee_id = $this->input->post('employee_id');
+        //validate employee id
+        $this->form_validation->set_rules('employee_id', 'Employee ID', 'trim|required|numeric|min_length[10]|max_length[10]');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('type', 'warning');
+            $this->session->set_flashdata('message', validation_errors());
+            redirect('forgot-password');
+            return;
+        }
+        $user = $this->db->get_where('user', ['nik' => $employee_id, 'is_active' => 1])->row_array();
+
+        if ($user) {
+            $token = base64_encode(random_bytes(32));
+            $user_token = [
+                'email' => $user['email'],
+                'token' => $token,
+                'date_created' => time()
+            ];
+
+            $this->db->insert('user_token', $user_token);
+            $this->_send_email($token, $user['email'], 'forgot');
+
+            $this->session->set_flashdata('alert', '<div class="alert alert-success" role="alert">
+                Please check your email to reset your password!
+            </div>');
+            redirect('forgot-password');
+        } else {
+            $this->session->set_flashdata('type', 'warning');
+            $this->session->set_flashdata('message', 'Employee ID not registered or activated.');
+            redirect('forgot-password');
+        }
+    }
+
+    private function _send_email($token, $email, $type)
+    {
+        // Load PHPMailer
+        $this->load->library('PHPMailer_load');
+        $mail = $this->phpmailer_load->load();
+
+        try {
+            $mail->clearAddresses();
+            $mail->clearCCs();
+            $mail->clearBCCs();
+
+            // === Konfigurasi SMTP ===
+            $mail->isSMTP();
+            $mail->Host       = 'mail.samorausahamakmur.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'it.info@samorausahamakmur.com';
+            $mail->Password   = 'SumEmail3903183'; //password server email
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+
+            // === Pengirim ===
+            $mail->setFrom('noreply@samorausahamakmur.com', 'E-ci Platform Notification');
+            $mail->addAddress($email);
+
+            // === Isi Email ===
+            if ($type == 'forgot') {
+                $resetLink = base_url('reset-password?email=' . urlencode($email) . '&token=' . urlencode($token));
+
+                $mail->Subject = 'Reset Your Password - E-ci Platform';
+                $mail->msgHTML("
+                <p>Halo,</p>
+                <p>Kami menerima permintaan untuk mereset password akun Anda di <b>E-ci Platform</b>.</p>
+                <p>Silakan klik tombol di bawah ini untuk mengatur ulang password Anda:</p>
+                <p style='margin-left:10px 0 10px 10px'>
+                    <a href='{$resetLink}' 
+                        style='background-color:#4e73df; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px;'>
+                        Reset Password
+                    </a>
+                </p>
+                <p>Jika Anda tidak meminta reset password, abaikan email ini. Link ini hanya berlaku selama <b>1 jam</b>.</p>
+                <br>
+                <p>Terima kasih,</p>
+                <p><b>E-ci Platform Notification</b></p>
+            ");
+            }
+
+            // === Kirim Email ===
+            if (!$mail->send()) {
+                log_message('error', 'Gagal mengirim email ke ' . $email . ' - ' . $mail->ErrorInfo);
+                return false;
+            } else {
+                log_message('info', 'Email reset password dikirim ke ' . $email);
+                return true;
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Mailer Exception: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function reset_password()
+    {
+        $email = $this->input->get('email');
+        $token = $this->input->get('token');
+        
+        $user = $this->db->get_where('user', ['email' => $email, 'is_active' => 1])->row_array();
+
+        if ($user) {
+            $user_token = $this->db->get_where('user_token', ['token' => $token])->row_array();
+            
+            if ($user_token) {
+
+                $now = time();
+                if ($user_token['date_created'] < $now - (60 * 60)) {
+                    $this->db->delete('user_token', ['email' => $email]);
+                    
+                    $this->session->set_flashdata('type', 'warning');
+                    $this->session->set_flashdata('message', 'Reset password failed! Token expired.');
+                    redirect('login');
+                }
+                $this->session->set_userdata('reset_email', $email);
+                $this->load->view('layouts/reset_password');
+            } else {
+                $this->session->set_flashdata('type', 'warning');
+                $this->session->set_flashdata('message', 'Reset password failed! Wrong token.');
+                redirect('login');
+            }
+        } else {
+            $this->session->set_flashdata('type', 'warning');
+            $this->session->set_flashdata('message', 'Reset password failed! Wrong email.');
+            redirect('login');
+        }
+    }
+
+    public function process_reset_password()
+    {
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password_confirm]');
+        $this->form_validation->set_rules('password_confirm', 'Password Confirm', 'required|trim|min_length[6]|matches[password]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('layouts/reset_password');
+        } else {
+            $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+            $email = $this->session->userdata('reset_email');
+
+            $this->db->set('password', $password)
+                ->where('email', $email)
+                ->update('user');
+
+            $this->db->delete('user_token', ['email' => $email]);
+
+            $this->session->unset_userdata('reset_email');
+
+            $this->session->set_flashdata('type', 'success');
+            $this->session->set_flashdata('message', 'Password has been reset! Please login.');
+            redirect('login');
+        }
+    }
+
+/**
+ * Destroys the current user's session and logs them out.
+ *
+ *Sends a flash message of type 'info' with the message 'You have been logged out successfully.' and redirects the user to the login page.
+ */
     public function logout()
     {
         $this->session->sess_destroy();

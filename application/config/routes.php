@@ -49,12 +49,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'admin';
+$route['default_controller'] = 'users';
 
 // Authentication routes
 $route['login'] = 'authentication';
 $route['login/process'] = 'authentication/process_login';
 $route['logout'] = 'authentication/logout';
+$route['forgot-password'] = 'authentication/forgot_password';
+$route['forgot-password/send'] = 'authentication/send_reset_link';
+$route['reset-password'] = 'authentication/reset_password';
+$route['reset-password/process'] = 'authentication/process_reset_password';
 
 // Dashboard routes
 $route['dashboard/admin'] = 'admin';
